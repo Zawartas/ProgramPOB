@@ -36,7 +36,7 @@ public:
 private slots:
     void otworzPlik();
     bool wczytajPlik(const QString &);
-    void ustawObrazek(const QImage &);
+    //void ustawObrazek(const QImage &);
     void ustawInvertObrazka();
     void on_actionPokazHistogramOryginalu_triggered();
     void on_actionPokazHistogramZmodyfikowanego_triggered();

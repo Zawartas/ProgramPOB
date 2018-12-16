@@ -32,14 +32,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+/*------------FUNKCJE ZWIAZANE Z WCZYTANIEM PLIKU-----------------*/
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
 void MainWindow::otworzPlik()
 {
-    QString filtr_rozszerzen = "Pliki JPG (*.jpg)";
+    QString filtr_rozszerzen = "Obrazy (*.jpg *.png)";
     QString nazwa_pliku = QFileDialog::getOpenFileName(this, "Otwórz plik", QDir::homePath(), filtr_rozszerzen);
+
     wczytajPlik(nazwa_pliku);
 }
 
-bool MainWindow::wczytajPlik(const QString &nazwa_pliku)
+bool MainWindow::wczytajPlik(const QString & nazwa_pliku)
 {
     QImageReader reader(nazwa_pliku);
     reader.setAutoTransform(true);
@@ -51,58 +57,22 @@ bool MainWindow::wczytajPlik(const QString &nazwa_pliku)
         return false;
     }
 
-    mMatImage = cv::imread(nazwa_pliku.toStdString(), 0);
-                                                //wczytujemy juz jako Grayscale '0'
-    ustawObrazek(newImage);
+    mMatImage = cv::imread(nazwa_pliku.toStdString(), 0);  //wczytujemy juz jako Grayscale '0'
+    mObrazek = newImage;
+    mObrazekOryginal = mObrazek;
 
     const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")
         .arg(QDir::toNativeSeparators(nazwa_pliku)).arg(mObrazek.width()).arg(mObrazek.height()).arg(mObrazek.depth());
     statusBar()->showMessage(message);
-    return true;
-}
-
-void MainWindow::ustawObrazek(const QImage &newImage)
-{
-    mObrazek = newImage;
-    mObrazekOryginal = mObrazek;
     wyswietl(ui->labelObrazek, mObrazek);
-}
-
-void MainWindow::ustawInvertObrazka()
-{
-    mCzyIstniejeZmodyfikowanyObraz = true;
-
-    mObrazekZmodyfikowany = mObrazek;
-    mObrazekZmodyfikowany.invertPixels();
-
-    wyswietl(ui->labelOutputPicture, mObrazekZmodyfikowany);
-}
-
-
-void MainWindow::on_actionPokazHistogramOryginalu_triggered()
-{
-    Histogram *hist_oryginalu = new Histogram(mObrazek);
-    hist_oryginalu->setMinimumSize(900,300);
-    hist_oryginalu->setWindowTitle("Histogram obrazu oryginalnego");
-    hist_oryginalu->show();
-}
-
-void MainWindow::on_actionPokazHistogramZmodyfikowanego_triggered()
-{
-    if (mCzyIstniejeZmodyfikowanyObraz)
-    {
-        Histogram *hist_zmodyfik = new Histogram(mObrazekZmodyfikowany);
-        hist_zmodyfik->setMinimumSize(900,300);
-        hist_zmodyfik->setWindowTitle("Histogram obrazu zmodyfikowanego");
-        hist_zmodyfik->show();
-    }
-    else
-        QMessageBox::information(this,"UWAGA","Nie dokonano żadnej modyfikacji.\n Brak danych dla Histogramu.");
+    //qDebug() << mObrazek.format() << endl; //tutaj mozna sprawdzic jaki Format zwroci 5 to PNG
+    //qDebug() << mObrazek.allGray() << endl;
+    return true;
 }
 
 void MainWindow::on_actionKonwertujNaGrayScale_triggered()
 {
-    Q_ASSERT(mObrazek.format() == QImage::Format_RGB32);
+    Q_ASSERT(mObrazek.format() == QImage::Format_RGB32 || mObrazek.format() == QImage::Format_ARGB32); //jpg czy png
     for (int i = 0; i < mObrazek.height(); i++)
     {
         QRgb *pixel = reinterpret_cast<QRgb*>(mObrazek.scanLine(i));
@@ -130,12 +100,52 @@ void MainWindow::wyswietl(QLabel *gdzie, const QImage &obrazek) //f-cja wyswietl
     gdzie->setAlignment(Qt::AlignCenter);
 }
 
-void MainWindow::on_actionProgowanieBinarne_triggered() //progowanie na 0 lub 255
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+/*----------------WYSWIETLENIE HISTOGRAMU-------------------------*/
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+void MainWindow::on_actionPokazHistogramOryginalu_triggered()
+{
+    Histogram *hist_oryginalu = new Histogram(mObrazek);
+    hist_oryginalu->setMinimumSize(900,300);
+    hist_oryginalu->setWindowTitle("Histogram obrazu oryginalnego");
+    hist_oryginalu->show();
+}
+
+void MainWindow::on_actionPokazHistogramZmodyfikowanego_triggered()
+{
+    if (mCzyIstniejeZmodyfikowanyObraz)
+    {
+        Histogram *hist_zmodyfik = new Histogram(mObrazekZmodyfikowany);
+        hist_zmodyfik->setMinimumSize(900,300);
+        hist_zmodyfik->setWindowTitle("Histogram obrazu zmodyfikowanego");
+        hist_zmodyfik->show();
+    }
+    else
+        QMessageBox::information(this,"UWAGA","Nie dokonano żadnej modyfikacji.\n Brak danych dla Histogramu.");
+}
+
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+/*----------------FUNKCJE MODYFIKACJE OBRAZU----------------------*/
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+void MainWindow::ustawInvertObrazka()
 {
     mCzyIstniejeZmodyfikowanyObraz = true;  //zmienna wprowadzona po to zeby program
                                             //wiedzial ze jest jakikolwiek obrazek
                                             //w drugim okienku
     mObrazekZmodyfikowany = mObrazek;       //pracujemy na Zmodyfikowanym Obrazku
+    mObrazekZmodyfikowany.invertPixels();
+
+    wyswietl(ui->labelOutputPicture, mObrazekZmodyfikowany);
+}
+
+void MainWindow::on_actionProgowanieBinarne_triggered() //progowanie na 0 lub 255
+{
+    mCzyIstniejeZmodyfikowanyObraz = true;
+    mObrazekZmodyfikowany = mObrazek;
 
     for (int i = 0; i < mObrazekZmodyfikowany.height(); i++)
     {
@@ -166,9 +176,7 @@ void MainWindow::on_actionProgowanieNprogow_triggered()
 //                        QString("Wartość progowania to %1").arg(QString::number(ilosc_progow)));
 //    }
 
-    mCzyIstniejeZmodyfikowanyObraz = true;  //zmienna wprowadzona po to zeby program
-                                            //wiedzial ze jest jakikolwiek obrazek
-                                            //w drugim okienku
+    mCzyIstniejeZmodyfikowanyObraz = true;
     mObrazekZmodyfikowany = mObrazek;       //pracujemy na Zmodyfikowanym Obrazku
 
     double prog = 255 - (255/((ilosc_progow+1)*2));
@@ -215,16 +223,12 @@ void MainWindow::on_actionProgowanieNprogow_triggered()
 
 void MainWindow::on_actionWyrownanie_triggered()
 {
-    mCzyIstniejeZmodyfikowanyObraz = true;  //zmienna wprowadzona po to zeby program
-                                            //wiedzial ze jest jakikolwiek obrazek
-                                            //w drugim okienku
+    mCzyIstniejeZmodyfikowanyObraz = true;
     mObrazekZmodyfikowany = mObrazek;       //pracujemy na Zmodyfikowanym Obrazku
 
     QVector<unsigned int> tablica(256, 0);
 
     int ilosc_pikseli = mObrazek.width() * mObrazek.height();
-
-    qDebug() << "ilosc pikseli: " << ilosc_pikseli << endl;
 
     for (int x = 0; x < mObrazek.width(); x++)
         for (int y = 0; y < mObrazek.height(); y++)
@@ -241,9 +245,6 @@ void MainWindow::on_actionWyrownanie_triggered()
         dystrybuanta[i] = dystrybuanta[i-1] + tablica[i];
         min_dystrybuanty = dystrybuanta[i]<dystrybuanta[i-1]?dystrybuanta[i]:min_dystrybuanty;
     }
-
-    qDebug() << "ilosc pikseli: " << ilosc_pikseli << endl;
-    qDebug() << "min_dystrybuanty: " << min_dystrybuanty << endl;
 
     QVector<int> dystrybuanta_zmodyfikowana(256, 0);
     for(int i = 1; i < 256; i++)
@@ -270,10 +271,8 @@ void MainWindow::on_actionWyrownanie_triggered()
 
 void MainWindow::on_actionRozciagniecie_triggered()
 {
-    mCzyIstniejeZmodyfikowanyObraz = true;  //zmienna wprowadzona po to zeby program
-                                            //wiedzial ze jest jakikolwiek obrazek
-                                            //w drugim okienku
-    mObrazekZmodyfikowany = mObrazek;       //pracujemy na Zmodyfikowanym Obrazku
+    mCzyIstniejeZmodyfikowanyObraz = true;
+    mObrazekZmodyfikowany = mObrazek;
 
     QVector<unsigned int> tablica(256, 0);
 
@@ -301,36 +300,35 @@ void MainWindow::on_actionRozciagniecie_triggered()
             *pixel = QColor(mod_kol, mod_kol, mod_kol).rgb();
         }
     }
-
     wyswietl(ui->labelOutputPicture, mObrazekZmodyfikowany);
 }
 
 void MainWindow::on_actionLaplacian_triggered()
 {
-    bool ok;
-    int parametr = QInputDialog::getInt(this, "Parametryzacja",
-                                             "Podaj ilość progów:", QLineEdit::Normal,
-                                             1,255,2,&ok);
-    while (parametr%2 == 0)
+    DialogUiParameters *okno_na_parametry = new DialogUiParameters(0, 0, 0, 0, 1, 1);
+    okno_na_parametry->show();
+    mCzyIstniejeZmodyfikowanyObraz = true;
+
+    cv::Mat output;
+    float mask[9];
+    int border{0};
+    if (okno_na_parametry->exec() == QDialog::Accepted)
     {
-        QMessageBox::warning(this, "UWAGA", "Podaj liczbę NIEPARZYSTĄ!!!");
-        parametr = QInputDialog::getInt(this, "Parametryzacja",
-                                                     "Podaj ilość progów:", QLineEdit::Normal,
-                                                     1,255,2,&ok);
+        for (int i = 0; i < 9; i++){
+            mask[i] = static_cast<float>(okno_na_parametry->maska[i]);
+            qDebug() << mask[i] << endl;
+        }
+    border = okno_na_parametry->border;
+    qDebug() << "border: " << border << endl;
     }
-    mCzyIstniejeZmodyfikowanyObraz = true;  //zmienna wprowadzona po to zeby program
-                                            //wiedzial ze jest jakikolwiek obrazek
-                                            //w drugim okienku
-
-    cv::Mat output = mMatImage;
-
     //kombinowanie z laplacjanem i inna macierza
-    //float m[9] = {1,-2,1,-2,4,-2,1,-2,1};
-    //cv::Mat kernel(cv::Size(3,3), CV_8S, m);
-    //filter2D(mMatImage, output, CV_8U, kernel);
+    cv::Mat kernel(3, 3, CV_8S, mask);
+    cv::Mat kernelFlipped;
+    cv::flip(kernel, kernelFlipped, -1);
 
-    cv::Laplacian(mMatImage, output, CV_8U, parametr);
-        //cv::cvtColor(output,output,CV_BGR2RGB);
+    cv::filter2D(mMatImage, output, CV_8U, kernelFlipped, cv::Point(-1,-1), 0, border);
+
+
     mObrazekZmodyfikowany = QImage(static_cast<uchar*>(output.data), output.cols, output.rows, static_cast<int>(output.step), QImage::Format_Grayscale8);
         //cv::namedWindow("My Image");
         //cv::imshow("My Image", output);
@@ -338,49 +336,10 @@ void MainWindow::on_actionLaplacian_triggered()
     wyswietl(ui->labelOutputPicture, mObrazekZmodyfikowany);
 }
 
-void MainWindow::on_actionExportToCSV_triggered()
-{
-    //w tej chwili podany jest oryginalnie wczytany mMatimage - ale moze byc to jakikolwiek Mat
-    saveMatToCsv(MainWindow::matImage(), "output.csv");
-}
-
-void MainWindow::saveMatToCsv(const cv::Mat &matrix, std::string filename){
-    std::ofstream outputFile(filename);
-    outputFile << cv::format(matrix, 2) << std::endl;
-    outputFile.close();
-}
-
-void MainWindow::on_actionWczytajCSV_triggered()
-{
-    cv::Mat img;
-    cv::Ptr<cv::ml::TrainData> raw_data;
-    cv::String sciezka = "D:/DEVEL/build-AtApp_2-Desktop_Qt_5_7_1_MinGW_32bit-Debug/output_2.csv";
-    raw_data = cv::ml::TrainData::loadFromCSV(sciezka, 0);
-        cv::Mat data = raw_data->getSamples();
-        // optional if you have a color image and not just raw data
-        data.convertTo(img, CV_8U);
-        //img = img.reshape(3); //set number of channels
-
-        // set the image type
-        img.convertTo(img, CV_8U);
-
-        // set the image size
-        //cv::resize(img, img, cv::Size(320, 256));
-
-        //std::cout << "img: " << img << std::endl;
-
-        cv::namedWindow("img");
-        cv::imshow("img", img);
-        //cv::imshow("mat", mat);
-        cv::waitKey(0);
-}
-
 void MainWindow::on_actionProgowanieBinarneOdwrocone_triggered()
 {
-    mCzyIstniejeZmodyfikowanyObraz = true;  //zmienna wprowadzona po to zeby program
-                                            //wiedzial ze jest jakikolwiek obrazek
-                                            //w drugim okienku
-    mObrazekZmodyfikowany = mObrazek;       //pracujemy na Zmodyfikowanym Obrazku
+    mCzyIstniejeZmodyfikowanyObraz = true;
+    mObrazekZmodyfikowany = mObrazek;
 
     for (int i = 0; i < mObrazekZmodyfikowany.height(); i++)
     {
@@ -475,7 +434,7 @@ void MainWindow::on_actionBinaryzacjaZParametrami_triggered()
 
 void MainWindow::on_actionProgowanieZachowaniePoziomySzarosci_triggered()
 {
-    DialogUiParameters *okno_na_parametry = new DialogUiParameters(0, 0, 1, this);
+    DialogUiParameters *okno_na_parametry = new DialogUiParameters(0, 0, 1, 0, this);
     okno_na_parametry->show();
 
     short int dol = 0, gora = 255;
@@ -510,7 +469,7 @@ void MainWindow::on_actionProgowanieZachowaniePoziomySzarosci_triggered()
 
 void MainWindow::on_actionRozciaganieZakresWgParametrow_triggered()
 {
-    DialogUiParameters *okno_na_parametry = new DialogUiParameters(0, 0, 1, this);
+    DialogUiParameters *okno_na_parametry = new DialogUiParameters(0, 0, 1, 0, this);
     okno_na_parametry->show();
 
     short int dol = 0, gora = 255;
@@ -586,6 +545,7 @@ bool MainWindow::saveFile(const QString &fileName)
 
 void MainWindow::on_actionZapiszZmodyfikowanyObrazJako_triggered()
 {
+
     QFileDialog dialog(this, tr("Zapisz jako..."));
     initializeImageFileDialog(dialog, QFileDialog::AcceptSave);
 
@@ -594,7 +554,7 @@ void MainWindow::on_actionZapiszZmodyfikowanyObrazJako_triggered()
 
 void MainWindow::on_actionRozjasnianie_triggered()
 {
-    DialogUiParameters *okno_na_parametry = new DialogUiParameters(0, 0, 0, this);
+    DialogUiParameters *okno_na_parametry = new DialogUiParameters(0, 0, 0, 0, 0, this);
     okno_na_parametry->show();
 
     short int dol = 0;
@@ -760,4 +720,46 @@ void::MainWindow::akcjaWygladzania()
         mObrazekZmodyfikowany = QImage(static_cast<uchar*>(output.data), output.cols, output.rows, static_cast<int>(output.step), QImage::Format_Grayscale8);
         wyswietl(ui->labelOutputPicture, mObrazekZmodyfikowany);
     }
+}
+
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+/*------------------FUNKCJE ZWIAZANE Z CSV------------------------*/
+/*----------------------------------------------------------------*/
+/*----------------------------------------------------------------*/
+void MainWindow::on_actionExportToCSV_triggered()
+{
+    //w tej chwili podany jest oryginalnie wczytany mMatimage - ale moze byc to jakikolwiek Mat
+    saveMatToCsv(MainWindow::matImage(), "output.csv");
+}
+
+void MainWindow::on_actionWczytajCSV_triggered()
+{
+    cv::Mat img;
+    cv::Ptr<cv::ml::TrainData> raw_data;
+    cv::String sciezka = "D:/DEVEL/build-AtApp_2-Desktop_Qt_5_7_1_MinGW_32bit-Debug/output_2.csv";
+    raw_data = cv::ml::TrainData::loadFromCSV(sciezka, 0);
+        cv::Mat data = raw_data->getSamples();
+        // optional if you have a color image and not just raw data
+        data.convertTo(img, CV_8U);
+        //img = img.reshape(3); //set number of channels
+
+        // set the image type
+        img.convertTo(img, CV_8U);
+
+        // set the image size
+        //cv::resize(img, img, cv::Size(320, 256));
+
+        //std::cout << "img: " << img << std::endl;
+
+        cv::namedWindow("img");
+        cv::imshow("img", img);
+        //cv::imshow("mat", mat);
+        cv::waitKey(0);
+}
+
+void MainWindow::saveMatToCsv(const cv::Mat &matrix, std::string filename){
+    std::ofstream outputFile(filename);
+    outputFile << cv::format(matrix, 2) << std::endl;
+    outputFile.close();
 }

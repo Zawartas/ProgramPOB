@@ -27,28 +27,36 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    dialoguiparameters.cpp \
-    histogram.cpp
+        dialoguiparameters.cpp \
+        histogram.cpp
 
 HEADERS += \
         mainwindow.h \
-    dialoguiparameters.h \
-    histogram.h
+        dialoguiparameters.h \
+        histogram.h
 
 FORMS += \
-    dialoguiparameters.ui \
-    histogram.ui \
-    mainwindow.ui
+        dialoguiparameters.ui \
+        histogram.ui \
+        mainwindow.ui
 
-INCLUDEPATH += C:\opencv-build\install\include
+INCLUDEPATH += D:\opencv-build\install\include
 
-LIBS += C:\opencv-build\bin\libopencv_core400.dll
-LIBS += C:\opencv-build\bin\libopencv_highgui400.dll
-LIBS += C:\opencv-build\bin\libopencv_imgcodecs400.dll
-LIBS += C:\opencv-build\bin\libopencv_imgproc400.dll
-LIBS += C:\opencv-build\bin\libopencv_features2d400.dll
-LIBS += C:\opencv-build\bin\libopencv_calib3d400.dll
-LIBS += C:\opencv-build\bin\libopencv_ml400.dll #library for CSV import
+#LIBS += C:\opencv-build\bin\libopencv_core400.dll
+#LIBS += C:\opencv-build\bin\libopencv_highgui400.dll
+#LIBS += C:\opencv-build\bin\libopencv_imgcodecs400.dll
+#LIBS += C:\opencv-build\bin\libopencv_imgproc400.dll
+#LIBS += C:\opencv-build\bin\libopencv_features2d400.dll
+#LIBS += C:\opencv-build\bin\libopencv_calib3d400.dll
+#LIBS += C:\opencv-build\bin\libopencv_ml400.dll #library for CSV import
+
+LIBS += D:\opencv-build\bin\libopencv_core343.dll
+LIBS += D:\opencv-build\bin\libopencv_highgui343.dll
+LIBS += D:\opencv-build\bin\libopencv_imgcodecs343.dll
+LIBS += D:\opencv-build\bin\libopencv_imgproc343.dll
+LIBS += D:\opencv-build\bin\libopencv_features2d343.dll
+LIBS += D:\opencv-build\bin\libopencv_calib3d343.dll
+LIBS += D:\opencv-build\bin\libopencv_ml343.dll #library for CSV import
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
