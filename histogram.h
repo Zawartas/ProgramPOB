@@ -10,6 +10,10 @@
 #include <QtCharts/QLegend>
 #include <QtCharts/QBarCategoryAxis>
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 QT_CHARTS_USE_NAMESPACE
 
 namespace Ui {
@@ -22,9 +26,11 @@ class Histogram : public QDialog
 
 public:
     explicit Histogram(const QImage &, QWidget *parent = nullptr);
+    explicit Histogram(cv::Mat &, QWidget *parent = nullptr);
     ~Histogram();
 
     void do_histogram(QImage &);
+    void do_histogram(cv::Mat &);
 
 private:
     Ui::Histogram *ui;

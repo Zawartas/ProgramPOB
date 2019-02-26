@@ -1,0 +1,15 @@
+WAZNA MODYFIKACJA PROGRAm
+
+jak rozwiazac problem ZMIAN - tzn z mmodyfikujemy caly czas ten am plik ?
+
+kazda zmiana wprowadza zmiany do ZMODYFIKOWANEJ  wersji (globalnej)
+
+przycis ktory przywraca wersje oryginalana
+
+dzieki temu nie trzeba kombinowac z wklejaniem przed akzda funkcja jakis cudow wiankow
+
+
+COFNIJ zmiane- 5 poprzednich krokow na przyklad
+na przyklad rozjasnienie
+1. oryginal
+2. rozjasniamy

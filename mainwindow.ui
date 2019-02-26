@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>825</width>
-    <height>606</height>
+    <width>932</width>
+    <height>638</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,50 +16,129 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QLabel" name="labelObrazek">
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_Lewy" stretch="0,4,1">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(200, 200, 200);</string>
+          </property>
+          <property name="text">
+           <string>Obrazek oryginalny</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelObrazek">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(227, 227, 227);
 </string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLabel" name="labelOutputPicture">
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(227, 227, 227);</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QProgressBar" name="progressBar">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>480</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="textVisible">
-       <bool>false</bool>
-      </property>
-     </widget>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="histogram_2" name="histogramLewy" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(200, 200, 200);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_Centralny" stretch="0,4,1">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(200, 200, 200);</string>
+          </property>
+          <property name="text">
+           <string>Obrazek po modyfikacji</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelOutputPicture">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(227, 227, 227);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="histogram_2" name="histogramCentralny" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(200, 200, 200);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_Prawy" stretch="0,4,1">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(200, 200, 200);</string>
+          </property>
+          <property name="text">
+           <string>Obrazek &quot;odłożony&quot; do porównań.</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelOutputPicture2">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(227, 227, 227);</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="histogram_2" name="histogramPrawy" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(200, 200, 200);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -68,7 +147,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>825</width>
+     <width>932</width>
      <height>21</height>
     </rect>
    </property>
@@ -79,58 +158,88 @@
     <addaction name="actionOtworzPlik"/>
     <addaction name="actionExportToCSV"/>
     <addaction name="actionWczytajCSV"/>
+    <addaction name="actionWczytajCSVdoObrobki"/>
     <addaction name="actionZapiszZmodyfikowanyObrazJako"/>
    </widget>
    <widget class="QMenu" name="menuEdycja">
     <property name="title">
      <string>Edycja</string>
     </property>
-    <widget class="QMenu" name="menuProgowanie">
+    <widget class="QMenu" name="menuCwiczenia3">
      <property name="title">
-      <string>Progowanie</string>
+      <string>Ćwiczenia 3</string>
      </property>
-     <addaction name="actionProgowanieBinarne"/>
-     <addaction name="actionProgowanieBinarneOdwrocone"/>
-     <addaction name="actionProgowanieNprogow"/>
-     <addaction name="actionBinaryzacjaZParametrami"/>
-     <addaction name="actionProgowanieZachowaniePoziomySzarosci"/>
+     <addaction name="actionZastosujMaske"/>
+     <addaction name="actionLaplacian"/>
+     <addaction name="actionFiltracja0stopni"/>
+     <addaction name="actionFiltracja90stopni"/>
+     <addaction name="actionRoberts"/>
     </widget>
-    <widget class="QMenu" name="menuRozciaganie">
+    <widget class="QMenu" name="menu_wiczenia_4">
      <property name="title">
-      <string>Rozciąganie</string>
+      <string>Ćwiczenia 4</string>
      </property>
-     <addaction name="actionRozciagniecie"/>
-     <addaction name="actionRozciaganieZakresWgParametrow"/>
+     <addaction name="actionDetekcjaSzkieletu"/>
+     <addaction name="actionErozja"/>
+     <addaction name="actionDylatacja"/>
+     <addaction name="actionOtwarcie"/>
+     <addaction name="actionZamkniecie"/>
     </widget>
-    <widget class="QMenu" name="menuROBOCZE">
+    <widget class="QMenu" name="menu_wiczenia_5">
      <property name="title">
-      <string>Arytmetyczne</string>
+      <string>Ćwiczenia 5</string>
      </property>
-     <addaction name="actionDodawanieObrazow"/>
-     <addaction name="actionOdejmowanieObrazow"/>
-     <addaction name="actionOdejmowanieAbs"/>
-     <addaction name="actionAND"/>
-     <addaction name="actionOR"/>
-     <addaction name="actionXOR"/>
+     <addaction name="actionSegmentacja_Watershed"/>
     </widget>
-    <widget class="QMenu" name="menuWyg_adzanie">
+    <widget class="QMenu" name="menu_wiczenia_1_2">
      <property name="title">
-      <string>Wygładzanie</string>
+      <string>Ćwiczenia 1-2</string>
      </property>
+     <widget class="QMenu" name="menuArytmetyczne">
+      <property name="title">
+       <string>Arytmetyczne</string>
+      </property>
+      <addaction name="actionDodawanieObrazow"/>
+      <addaction name="actionOdejmowanieObrazow"/>
+      <addaction name="actionOdejmowanieAbs"/>
+      <addaction name="actionAND"/>
+      <addaction name="actionOR"/>
+      <addaction name="actionXOR"/>
+     </widget>
+     <widget class="QMenu" name="menuRozci_ganie">
+      <property name="title">
+       <string>Rozciąganie</string>
+      </property>
+      <addaction name="actionRozciagniecie"/>
+      <addaction name="actionRozciaganieZakresWgParametrow"/>
+     </widget>
+     <widget class="QMenu" name="menuProgowanie_2">
+      <property name="title">
+       <string>Progowanie</string>
+      </property>
+      <addaction name="actionProgowanieBinarneOdwrocone"/>
+      <addaction name="actionProgowanieBinarne"/>
+      <addaction name="actionProgowanieNprogow"/>
+      <addaction name="actionBinaryzacjaZParametrami"/>
+      <addaction name="actionProgowanieZachowaniePoziomySzarosci"/>
+     </widget>
      <addaction name="actionBlur"/>
      <addaction name="actionGaussian"/>
      <addaction name="actionMedianBlur"/>
+     <addaction name="actionSciemnianie"/>
+     <addaction name="actionRozjasnianie"/>
+     <addaction name="actionWyrownanie"/>
+     <addaction name="actionInvert"/>
+     <addaction name="menuArytmetyczne"/>
+     <addaction name="menuRozci_ganie"/>
+     <addaction name="menuProgowanie_2"/>
     </widget>
-    <addaction name="actionInvert"/>
-    <addaction name="actionPowrotDoOryginalu"/>
-    <addaction name="actionKonwertujNaGrayScale"/>
-    <addaction name="actionWyrownanie"/>
-    <addaction name="actionLaplacian"/>
-    <addaction name="menuProgowanie"/>
-    <addaction name="menuRozciaganie"/>
-    <addaction name="actionRozjasnianie"/>
-    <addaction name="menuROBOCZE"/>
-    <addaction name="menuWyg_adzanie"/>
+    <addaction name="actionCofnijZmiane"/>
+    <addaction name="separator"/>
+    <addaction name="menu_wiczenia_1_2"/>
+    <addaction name="menuCwiczenia3"/>
+    <addaction name="menu_wiczenia_4"/>
+    <addaction name="menu_wiczenia_5"/>
    </widget>
    <widget class="QMenu" name="menuHistogram">
     <property name="title">
@@ -139,17 +248,18 @@
     <addaction name="actionPokazHistogramOryginalu"/>
     <addaction name="actionPokazHistogramZmodyfikowanego"/>
    </widget>
+   <widget class="QMenu" name="menuTryb_modyfikacji">
+    <property name="title">
+     <string>Opcje</string>
+    </property>
+    <addaction name="actionPowrotDoOryginalu"/>
+    <addaction name="actionZapamietajObrazDoPorownania"/>
+    <addaction name="actionPokazTabliceEXCEL"/>
+   </widget>
    <addaction name="menuplik"/>
    <addaction name="menuEdycja"/>
    <addaction name="menuHistogram"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <addaction name="menuTryb_modyfikacji"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOtworzPlik">
@@ -215,7 +325,7 @@
   </action>
   <action name="actionExportToCSV">
    <property name="text">
-    <string>Export to CSV</string>
+    <string>Export do CSV</string>
    </property>
   </action>
   <action name="actionWczytajCSV">
@@ -298,8 +408,110 @@
     <string>Odejmowanie abs</string>
    </property>
   </action>
+  <action name="actionCiagla">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ciągła</string>
+   </property>
+  </action>
+  <action name="actionZastosujMaske">
+   <property name="text">
+    <string>Zastosuj Maskę</string>
+   </property>
+  </action>
+  <action name="actionFiltracja0stopni">
+   <property name="text">
+    <string>Filtracja 0 stopni</string>
+   </property>
+  </action>
+  <action name="actionFiltracja90stopni">
+   <property name="text">
+    <string>Filtracja 90 stopni</string>
+   </property>
+  </action>
+  <action name="actionRoberts">
+   <property name="text">
+    <string>Roberts</string>
+   </property>
+  </action>
+  <action name="actionDetekcjaSzkieletu">
+   <property name="text">
+    <string>Detekcja szkieletu</string>
+   </property>
+  </action>
+  <action name="actionErozja">
+   <property name="text">
+    <string>Erozja</string>
+   </property>
+  </action>
+  <action name="actionDylatacja">
+   <property name="text">
+    <string>Dylatacja</string>
+   </property>
+  </action>
+  <action name="actionOtwarcie">
+   <property name="text">
+    <string>Otwarcie</string>
+   </property>
+  </action>
+  <action name="actionZamkniecie">
+   <property name="text">
+    <string>Zamknięcie</string>
+   </property>
+  </action>
+  <action name="actionSegmentacja_Watershed">
+   <property name="text">
+    <string>Segmentacja - Watershed</string>
+   </property>
+  </action>
+  <action name="actionSciemnianie">
+   <property name="text">
+    <string>Ściemnianie</string>
+   </property>
+  </action>
+  <action name="actionCofnijZmiane">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Cofnij zmianę...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionZapamietajObrazDoPorownania">
+   <property name="text">
+    <string>Zapamiętaj obraz do porównania</string>
+   </property>
+  </action>
+  <action name="actionPokazTabliceEXCEL">
+   <property name="text">
+    <string>Pokaż tablicę EXCEL</string>
+   </property>
+  </action>
+  <action name="actionWczytajCSVdoObrobki">
+   <property name="text">
+    <string>Wczytaj CSV do obróbki</string>
+   </property>
+  </action>
+  <action name="actionArytmetyczne">
+   <property name="text">
+    <string>Arytmetyczne</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>histogram_2</class>
+   <extends>QWidget</extends>
+   <header>histogram_2.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
  <slots>

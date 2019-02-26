@@ -1,0 +1,31 @@
+        mCzyIstniejeZmodyfikowanyObraz = true;
+        mMatZmodyfikowany = poprzednieWersje.last().clone();
+
+
+if (poprzednieWersje.size() > MAX_SIZE_OF_UNDO) poprzednieWersje.removeLast(); 
+poprzednieWersje.append(mMatZmodyfikowany.clone());
+
+
+Program konwersji obrazów z postaci  *.bmp na tablice liczb, eksport do Excela, operacje w Excelu, operacje w programie, import z Excela, porównanie wyników operacji prowadzonych w programie z wynikami z Excela (tablice i pliki bmp) (BMP_EXC)  
+Ewentualne wykorzystanie strony www. Obserwacja w jednym oknie procesu przetwarzania obrazu dla postaci bmp i csv 
+Szybka regulacja rozmiaru okna w obrazie, automatyczny zooming, uniwersalna opcja „open”
+Porównanie wyników procedur przetwarzania obrazów prowadzonych w opracowanym programie oraz w Excelu.
+
+
+
+on_actionProgowanieBinarne_triggered
+
+on_actionProgowanieNprogow_triggered
+
+on_actionWyrownanie_triggered
+
+on_actionRozciagniecie_triggered
+
+    if (poprzednieWersje.size() > MAX_SIZE_OF_UNDO) poprzednieWersje.removeLast();
+    poprzednieWersje.append(qimage_to_mat_ref(mObrazekZmodyfikowany, CV_8U));
+
+    mObrazekZmodyfikowany = QImage(static_cast<uchar*>(poprzednieWersje.last().data),
+                                   poprzednieWersje.last().cols,
+                                   poprzednieWersje.last().rows,
+                                   static_cast<int>(poprzednieWersje.last().step),
+                                   QImage::Format_Grayscale8);

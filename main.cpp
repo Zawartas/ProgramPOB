@@ -5,7 +5,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.setMinimumSize(1024,768);
+    w.setWindowTitle("Szymon Zawartka POB");
+    w.setWindowState(Qt::WindowMaximized);
     w.show();
 
     return a.exec();
