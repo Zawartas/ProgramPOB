@@ -10,3 +10,5 @@ It has the option of undoing changes. It also show histograms. It can remember a
 It can open a CSV file if it can be treated as a picture. It can also export a picture to a CSV file.
 
 2000 LOC. Lots of fun!
+
+![Alt text](https://github.com/Zawartas/ProgramPOB/blob/master/DEMO.JPG?raw=true "DEMO picture")
